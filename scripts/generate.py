@@ -87,7 +87,11 @@ def main():
         f'# cloud-ipv4 export at {ts}; providers=aws,gcp,azure; count={len(allv4)}',
         '/ip/firewall/address-list/remove [find list="CloudAll"]',
     ]
-    lines += [f'/ip/firewall/address-list/add list="CloudAll" address={p} comment="cloud-ipv4"' for p in allv4]
+    lines += [
+    f':do={{/ip/firewall/address-list/add list="CloudAll" address={p} comment="cloud-ipv4"}} on-error={{}}'
+    for p in allv4
+]
+
 
     with open(OUT_FILE, "w", encoding="utf-8", newline="\n") as f:
         f.write("\n".join(lines) + "\n")
